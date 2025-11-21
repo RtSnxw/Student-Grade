@@ -3,11 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Grocery Inventory (CRUD)</title>
+  <link rel ="icon" type="image/icon" href="/favicon.ico" />
+  <title>Enroll Student</title>
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; max-width: 980px; margin: 24px auto; padding: 0 12px; background-color: burlywood; }
-    h1 { margin-bottom: 8px; color:white; text-shadow: 2px 2px 4px #000000; }
-    form, table { width: 100%; color: rgb(216, 148, 59); }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; max-width: 980px; margin: 24px auto; padding: 0 12px; background-color: rgb(114, 18, 18); }
+    p { font-weight:bold; color: #ffffff; text-shadow: 1px 1px 2px #000000; }
+    label { color:white; font-weight: bold; text-shadow: 1px 1px 2px #000000; }
+
+    h1 { margin-bottom: 8px; color:rgb(255, 255, 255); text-shadow: 2px 2px 4px #000000; }
+    h2 { margin-top: 24px; color:rgb(255, 255, 255); text-shadow: 1px 1px 2px #000000; }
+    form, table { width: 100%; color: rgb(255, 255, 255); text-shadow: 1px 1px 2px #000000; }
     input, select, button { padding: 8px; margin: 4px 0; }
     table { border-collapse: collapse; margin-top: 16px; width: 100%; }
     th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
@@ -15,7 +20,7 @@
     .row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
     .row-compact { display: grid; grid-template-columns: 180px 1fr 1fr 1fr 1fr 1fr; gap: 8px; align-items: end; }
     .actions button { margin-right: 6px; }
-    .muted { color: #666; font-size: 0.9em; }
+    .muted { color: #ffffff; font-size: 0.9em; text-shadow: 1px 1px 2px #000000;}
     .hidden { display: none; }
     .notice { margin: 8px 0; padding: 8px; border: 1px solid #ddd; }
     .group { margin-top: 8px; }
@@ -23,7 +28,8 @@
   </style>
 </head>
 <body>
-  <h1>Grocery Inventory</h1>
+  <h1>Student Enrollment</h1>
+  <p>Team 2</p>
   <p class="muted">Your backend should expose a REST API at <code>/api/items</code>.</p>
 
   <!-- Mode selector -->
@@ -32,7 +38,7 @@
       <label for="mode">Mode</label>
       <select id="mode">
         <option value="view">View</option>
-        <option value="create">Create</option>
+        <option value="create">Enroll</option>
         <option value="edit">Edit</option>
         <option value="delete">Delete</option>
       </select>
@@ -40,34 +46,34 @@
     <div class="muted">Select a mode to display the corresponding fields.</div>
   </div>
 
-  <h2 id="form-title">Product Viewer</h2>
+  <h2 id="form-title">Student Chart</h2>
   <form id="product-form">
     <!-- Group for create/edit -->
     <div id="fields-group" class="group">
       <div class="row">
         <div>
           <label for="name">Name</label>
-          <input type="text" id="name" placeholder="Product name" />
+          <input type="text" id="name" placeholder="Student Name" />
         </div>
         <div>
-          <label for="department">Department</label>
+          <label for="department">Major</label>
           <select id="department">
             <option value="">Loading…</option>
           </select>
         </div>
         <div>
-          <label for="origin">Origin</label>
+          <label for="origin">Country</label>
           <select id="origin">
             <option value="">Loading…</option>
           </select>
         </div>
         <div>
-          <label for="price">Price</label>
-          <input type="number" id="price" placeholder="Price" step="0.01" />
+          <label for="price">Phone Number</label>
+          <input type="text" id="price" placeholder="Number"/>
         </div>
         <div>
-          <label for="stock">Stock</label>
-          <input type="number" id="stock" placeholder="Stock" />
+          <label for="stock">Email</label>
+          <input type="text" id="stock" placeholder="Email" />
         </div>
         <div style="display:flex; gap:8px; align-items:flex-end;">
           <button type="submit" id="submit-btn">Create</button>
@@ -93,11 +99,11 @@
 
   <div id="notice" class="notice hidden"></div>
 
-  <h2>Products</h2>
+  <h2>Students</h2>
   <table>
     <thead>
       <tr>
-        <th>ID</th><th>Name</th><th>Department</th><th>Origin</th><th>Price</th><th>Stock</th><th>Actions</th>
+        <th>ID</th><th>Name</th><th>Major</th><th>Country</th><th>Phone Number</th><th>Email</th><th>Actions</th>
       </tr>
     </thead>
     <tbody id="tbody"></tbody>
@@ -203,7 +209,7 @@
 
     function setCreateMode() {
       clearFormFields();
-      formTitle.textContent = "Create Product";
+      formTitle.textContent = "Enroll New Student";
       fieldsGroup.classList.remove("hidden");
       deleteGroup.classList.add("hidden");
       submitBtn.textContent = "Create";
@@ -212,7 +218,7 @@
 
     function setViewMode() {
       clearFormFields();
-      formTitle.textContent = "Product Viewer";
+      formTitle.textContent = "Student Viewer";
       fieldsGroup.classList.add("hidden");
       deleteGroup.classList.add("hidden");
       cancelBtn.classList.add("hidden");
@@ -229,7 +235,7 @@
       } else {
         clearFormFields();
       }
-      formTitle.textContent = editId.value ? ("Edit Product #" + editId.value) : "Edit Product";
+      formTitle.textContent = editId.value ? ("Edit Student #" + editId.value) : "Edit Student";
       fieldsGroup.classList.remove("hidden");
       deleteGroup.classList.add("hidden");
       submitBtn.textContent = "Edit";
@@ -238,7 +244,7 @@
 
     function setDeleteMode(prefillId = "") {
       clearFormFields();
-      formTitle.textContent = "Delete Product";
+      formTitle.textContent = "Delete Student";
       fieldsGroup.classList.add("hidden");
       deleteGroup.classList.remove("hidden");
       cancelBtn.classList.add("hidden");

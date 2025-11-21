@@ -68,7 +68,6 @@ def fetch_product(product_id):
     """
     return None  # placeholder
 
-
 def insert_product(name, department, origin, price, stock):
     """
     TODO (student):
