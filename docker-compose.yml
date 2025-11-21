@@ -3,10 +3,10 @@ version: "3.9"
 services:
   db:
     image: mysql:8.0
-    container_name: groceries_db
+    container_name: students_db
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
-      MYSQL_DATABASE: groceries
+      MYSQL_DATABASE: students
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
     ports:
@@ -21,7 +21,7 @@ services:
 
   api:
     build: ./backend
-    container_name: groceries_api
+    container_name: students_api
     depends_on:
       db:
         condition: service_healthy
@@ -30,14 +30,14 @@ services:
       MYSQL_HOST: db
       MYSQL_USER: user
       MYSQL_PASSWORD: pass
-      MYSQL_DATABASE: groceries
+      MYSQL_DATABASE: students
       PORT: 5000
     ports:
       - "50000:5000"
 
   web:
     image: nginx:alpine
-    container_name: groceries_web
+    container_name: students_web
     depends_on:
       - api
     ports:
