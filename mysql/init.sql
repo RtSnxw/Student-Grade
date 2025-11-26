@@ -1,35 +1,45 @@
--- TODO (student):
--- This file should create a simple relational schema for a grocery inventory.
--- Suggested steps (write the real SQL yourself):
-
--- 1) Create database and (optionally) a user:
---    CREATE DATABASE groceries;
---    CREATE USER 'user'@'%' IDENTIFIED BY 'pass';
---    GRANT ALL PRIVILEGES ON groceries.* TO 'user'@'%';
---    USE groceries;
+CREATE DATABASE IF NOT EXISTS students;
+CREATE USER IF NOT EXISTS 'user'@'%' IDENTIFIED BY 'pass';
+GRANT ALL PRIVILEGES ON students.* TO 'user'@'%';
+FLUSH PRIVILEGES;
+USE students;
 
 -- 2) Create reference tables:
---    Table dept:
---      id INT AUTO_INCREMENT PRIMARY KEY
---      name VARCHAR(50) NOT NULL
---
---    Table origin:
---      id INT AUTO_INCREMENT PRIMARY KEY
---      code VARCHAR(3) NOT NULL
---
--- 3) Create products table that references dept and origin:
---      id INT AUTO_INCREMENT PRIMARY KEY
---      name VARCHAR(100) NOT NULL
---      major INT NOT NULL
---      country INT NOT NULL
---      phone VARCHAR(100) NOT NULL
---      email VARCHAR(100) NOT NULL
---      FOREIGN KEY (major_name) REFERENCES dept(id)
---      FOREIGN KEY (email) REFERENCES origin(id)
+CREATE TABLE dept (
+    major_id INT AUTO_INCREMENT PRIMARY KEY,
+    major VARCHAR(50) NOT NULL
+);
 
--- 4) (Optional) Insert some seed rows:
---    INSERT INTO dept (name) VALUES ('Dairy'), ('Produce'), ... ;
---    INSERT INTO origin (code) VALUES ('MX'), ('USA'), ... ;
---    INSERT INTO products (name, major_name, origin_id, price, stock) VALUES (...);
+CREATE TABLE origin (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(3) NOT NULL
+);
 
--- Keep it simple. Avoid complex constraints or validations.
+-- 3) Create students table that references dept and origin:
+CREATE TABLE students (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    major_id INT NOT NULL,
+    origin_id INT NOT NULL,
+    FOREIGN KEY (major_id) REFERENCES dept(major_id),
+    FOREIGN KEY (origin_id) REFERENCES origin(id)
+);
+
+-- 4) Insert seed data:
+INSERT INTO dept (major) VALUES 
+('Engeneering'),
+('Administration'),
+('Medicine'),
+('Laws');
+
+INSERT INTO origin (code) VALUES 
+('MX'),
+('USA'),
+('FR'),
+('CAN');
+
+INSERT INTO students (name, major_id, origin_id) VALUES 
+('Juan Pérez', 1, 1),
+('María García', 2, 2),
+('Carlos López', 3, 1),
+('Ana Martínez', 1, 3);
