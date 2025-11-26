@@ -4,7 +4,6 @@ GRANT ALL PRIVILEGES ON students.* TO 'user'@'%';
 FLUSH PRIVILEGES;
 USE students;
 
--- 2) Create reference tables:
 CREATE TABLE dept (
     major_id INT AUTO_INCREMENT PRIMARY KEY,
     major VARCHAR(50) NOT NULL
@@ -15,7 +14,6 @@ CREATE TABLE origin (
     code VARCHAR(3) NOT NULL
 );
 
--- 3) Create students table that references dept and origin:
 CREATE TABLE students (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -25,9 +23,8 @@ CREATE TABLE students (
     FOREIGN KEY (origin_id) REFERENCES origin(id)
 );
 
--- 4) Insert seed data:
 INSERT INTO dept (major) VALUES 
-('Engeneering'),
+('Engineering'),
 ('Administration'),
 ('Medicine'),
 ('Laws');
