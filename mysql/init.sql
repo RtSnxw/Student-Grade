@@ -1,6 +1,4 @@
 CREATE DATABASE IF NOT EXISTS students;
-CREATE USER IF NOT EXISTS 'user'@'%' IDENTIFIED BY 'pass';
-GRANT ALL PRIVILEGES ON students.* TO 'user'@'%';
 FLUSH PRIVILEGES;
 USE students;
 
@@ -19,6 +17,8 @@ CREATE TABLE students (
     name VARCHAR(100) NOT NULL,
     major_id INT NOT NULL,
     origin_id INT NOT NULL,
+    phone VARCHAR(15),
+    email VARCHAR(100),
     FOREIGN KEY (major_id) REFERENCES dept(major_id),
     FOREIGN KEY (origin_id) REFERENCES origin(id)
 );
@@ -35,8 +35,8 @@ INSERT INTO origin (code) VALUES
 ('FR'),
 ('CAN');
 
-INSERT INTO students (name, major_id, origin_id) VALUES 
-('Juan Pérez', 1, 1),
-('María García', 2, 2),
-('Carlos López', 3, 1),
-('Ana Martínez', 1, 3);
+INSERT INTO students (name, major_id, origin_id, phone, email) VALUES 
+('Juan Pérez', 1, 1, '7711234032', 'asterix@outlook.com'),
+('María García', 2, 2, '5512345678', 'sisiphos@outloook.com'),
+('Carlos López', 3, 1, '3319876543', 'jester@outlook.com'),
+('Luisa Fernández', 4, 3, '6623456789', 'jr12hipp@outlook.com');
