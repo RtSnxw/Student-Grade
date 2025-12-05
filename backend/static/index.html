@@ -3,365 +3,364 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel ="icon" type="image/icon" href="/favicon.ico" />
-  <title>Enroll Student</title>
-  <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; max-width: 980px; margin: 24px auto; padding: 0 12px; background-color: rgb(114, 18, 18); }
-    p { font-weight:bold; color: #ffffff; text-shadow: 1px 1px 2px #000000; }
-    label { color:white; font-weight: bold; text-shadow: 1px 1px 2px #000000; }
+  <title>Student Enrollment</title>
 
-    h1 { margin-bottom: 8px; color:rgb(255, 255, 255); text-shadow: 2px 2px 4px #000000; }
-    h2 { margin-top: 24px; color:rgb(255, 255, 255); text-shadow: 1px 1px 2px #000000; }
-    form, table { width: 100%; color: rgb(255, 255, 255); text-shadow: 1px 1px 2px #000000; }
-    input, select, button { padding: 8px; margin: 4px 0; }
-    table { border-collapse: collapse; margin-top: 16px; width: 100%; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    th { background: #f4f4f4; }
-    .row { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
-    .row-compact { display: grid; grid-template-columns: 180px 1fr 1fr 1fr 1fr 1fr; gap: 8px; align-items: end; }
-    .actions button { margin-right: 6px; }
-    .muted { color: #ffffff; font-size: 0.9em; text-shadow: 1px 1px 2px #000000;}
-    .hidden { display: none; }
-    .notice { margin: 8px 0; padding: 8px; border: 1px solid #ddd; }
-    .group { margin-top: 8px; }
-    label { font-size: 0.92em; display: block; margin-top: 2px; }
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:#6b0f0f;
+      color:white;
+      max-width:900px;
+      margin:auto;
+      padding:20px;
+    }
+    h1 { margin-bottom:5px; }
+    h2 { margin-top:20px; }
+    table {
+      width:100%;
+      border-collapse: collapse;
+      margin-top:15px;
+      background:white;
+      color:black;
+    }
+    th,td {
+      border:1px solid #ccc;
+      padding:8px;
+      text-align:left;
+    }
+    select, input, button {
+      padding:6px;
+      margin:4px;
+    }
+    .hidden { display:none; }
+    button { cursor:pointer; }
+    label { font-weight:bold; margin-right:6px; }
   </style>
 </head>
 <body>
-  <h1>Student Enrollment</h1>
-  <p>Team 2</p>
-  <p class="muted">Your backend should expose a REST API at <code>/api/items</code>.</p>
 
-  <!-- Mode selector -->
-  <div class="row-compact">
-    <div>
-      <label for="mode">Mode</label>
-      <select id="mode">
-        <option value="view">View</option>
-        <option value="create">Enroll</option>
-        <option value="edit">Edit</option>
-        <option value="delete">Delete</option>
-      </select>
-    </div>
-    <div class="muted">Select a mode to display the corresponding fields.</div>
+<h1>Student Enrollment</h1>
+<p>Team 2</p>
+
+<label for="mode">Mode:</label>
+<select id="mode">
+  <option value="view">View</option>
+  <option value="create">Enroll</option>
+  <option value="edit">Edit</option>
+  <option value="delete">Delete</option>
+</select>
+
+<h2 id="form-title">Student Viewer</h2>
+
+<form id="form">
+  <!-- Campos para crear / editar -->
+  <div id="form-fields" class="hidden">
+    <input type="text" id="name" placeholder="Student Name" required />
+    <select id="major"></select>
+    <select id="origin"></select>
+    <input type="text" id="phone" placeholder="Phone" />
+    <input type="text" id="email" placeholder="Email" />
+    <input type="hidden" id="edit-id" />
+    <button type="submit" id="submit-btn">Create</button>
+    <button type="button" id="cancel-btn" class="hidden">Cancel</button>
   </div>
 
-  <h2 id="form-title">Student Chart</h2>
-  <form id="product-form">
-    <!-- Group for create/edit -->
-    <div id="fields-group" class="group">
-      <div class="row">
-        <div>
-          <label for="name">Name</label>
-          <input type="text" id="name" placeholder="Student Name" />
-        </div>
-        <div>
-          <label for="department">Major</label>
-          <select id="department">
-            <option value="">Loading…</option>
-          </select>
-        </div>
-        <div>
-          <label for="origin">Country</label>
-          <select id="origin">
-            <option value="">Loading…</option>
-          </select>
-        </div>
-        <div>
-          <label for="price">Phone Number</label>
-          <input type="text" id="price" placeholder="Number"/>
-        </div>
-        <div>
-          <label for="stock">Email</label>
-          <input type="text" id="stock" placeholder="Email" />
-        </div>
-        <div style="display:flex; gap:8px; align-items:flex-end;">
-          <button type="submit" id="submit-btn">Create</button>
-          <button type="button" id="cancel-btn" class="hidden">Cancel</button>
-        </div>
-      </div>
-      <input type="hidden" id="edit-id" />
-    </div>
+  <!-- Campos para borrar -->
+  <div id="delete-box" class="hidden">
+    <input type="number" id="delete-id" placeholder="ID to delete" />
+    <button type="submit" id="delete-submit-btn">Delete</button>
+  </div>
+</form>
 
-    <!-- Group for delete (only ID) -->
-    <div id="delete-group" class="group hidden">
-      <div class="row">
-        <div>
-          <label for="delete-id">ID</label>
-          <input type="number" id="delete-id" placeholder="ID to delete" />
-        </div>
-        <div style="display:flex; gap:8px; align-items:flex-end;">
-          <button type="submit" id="delete-btn">Delete</button>
-        </div>
-      </div>
-    </div>
-  </form>
+<h2>Students</h2>
 
-  <div id="notice" class="notice hidden"></div>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th><th>Name</th><th>Major</th><th>Country</th><th>Phone</th><th>Email</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
 
-  <h2>Students</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th><th>Name</th><th>Major</th><th>Country</th><th>Phone Number</th><th>Email</th><th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="tbody"></tbody>
-  </table>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const API_BASE = "http://localhost:50000/api";
 
-  <script>
-    // Point to your API (adjust host/port if needed)
-    const API_BASE = "http://localhost:50000/api";
-    const API = `${API_BASE}/items`;
+  // Elementos del DOM
+  const modeSel      = document.getElementById("mode");
+  const form         = document.getElementById("form");
+  const formTitle    = document.getElementById("form-title");
+  const formFields   = document.getElementById("form-fields");
+  const deleteBox    = document.getElementById("delete-box");
+  const submitBtn    = document.getElementById("submit-btn");
+  const cancelBtn    = document.getElementById("cancel-btn");
+  const deleteIdEl   = document.getElementById("delete-id");
 
-    const form = document.getElementById("product-form");
-    const tbody = document.getElementById("tbody");
-    const modeSel = document.getElementById("mode");
+  const nameInput    = document.getElementById("name");
+  const majorSel     = document.getElementById("major_id");
+  const originSel    = document.getElementById("origin_id");
+  const phoneInput   = document.getElementById("phone");
+  const emailInput   = document.getElementById("email");
+  const editIdInput  = document.getElementById("edit-id");
 
-    const formTitle = document.getElementById("form-title");
-    const submitBtn = document.getElementById("submit-btn");
-    const cancelBtn = document.getElementById("cancel-btn");
+  const tbody        = document.getElementById("tbody");
 
-    const fieldsGroup = document.getElementById("fields-group");
-    const deleteGroup = document.getElementById("delete-group");
+  // ---- Cargar catálogos (majors y origins) ----
+  async function loadOptions() {
+    try {
+      const depRes = await fetch(`${API_BASE}/departments`);
+      const departments = await depRes.json();
 
-    const nameEl = document.getElementById("name");
-    const deptEl = document.getElementById("department");
-    const originEl = document.getElementById("origin");
-    const priceEl = document.getElementById("price");
-    const stockEl = document.getElementById("stock");
-    const editId = document.getElementById("edit-id");
-    const deleteId = document.getElementById("delete-id");
-    const notice = document.getElementById("notice");
+      majorSel.innerHTML =
+        `<option value="">Select Major...</option>` +
+        departments.map(d => `<option value="${d.id}">${d.name}</option>`).join("");
 
-    // cache for options
-    let DEPARTMENTS = []; // [{id, name}]
-    let ORIGINS = [];     // [{id, code}]
+      const oriRes = await fetch(`${API_BASE}/origins`);
+      const origins = await oriRes.json();
 
-    function showNotice(msg) {
-      notice.textContent = msg;
-      notice.classList.remove("hidden");
-      setTimeout(() => notice.classList.add("hidden"), 1500);
+      originSel.innerHTML =
+        `<option value="">Select Country...</option>` +
+        origins.map(o => `<option value="${o.id}">${o.code}</option>`).join("");
+    } catch (err) {
+      console.error("Error loading options", err);
+      majorSel.innerHTML = `<option value="">(error)</option>`;
+      originSel.innerHTML = `<option value="">(error)</option>`;
     }
+  }
 
-    async function loadMeta() {
-      // load departments
-      try {
-        const d = await fetch(`${API_BASE}/departments`);
-        DEPARTMENTS = await d.json();
-      } catch (e) { DEPARTMENTS = []; }
-
-      // load origins
-      try {
-        const o = await fetch(`${API_BASE}/origins`);
-        ORIGINS = await o.json();
-      } catch (e) { ORIGINS = []; }
-
-      // populate selects
-      deptEl.innerHTML = "";
-      if (DEPARTMENTS.length === 0) {
-        deptEl.innerHTML = `<option value="">(no departments)</option>`;
-      } else {
-        deptEl.innerHTML = `<option value="">Select a department…</option>` +
-          DEPARTMENTS.map(x => `<option value="${x.name}">${x.name}</option>`).join("");
-      }
-
-      originEl.innerHTML = "";
-      if (ORIGINS.length === 0) {
-        originEl.innerHTML = `<option value="">(no origins)</option>`;
-      } else {
-        originEl.innerHTML = `<option value="">Select an origin…</option>` +
-          ORIGINS.map(x => `<option value="${x.code}">${x.code}</option>`).join("");
-      }
-    }
-
-    async function loadItems() {
-      const res = await fetch(API);
-      const items = await res.json();
+  // ---- Cargar tabla de estudiantes ----
+  async function loadStudents() {
+    try {
+      const res = await fetch(`${API_BASE}/students`);
+      const students = await res.json();
       tbody.innerHTML = "";
-      for (const it of items) {
+
+      students.forEach(s => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${it.id}</td>
-          <td>${it.name}</td>
-          <td>${it.department}</td>
-          <td>${it.origin ?? ""}</td>
-          <td>${it.price}</td>
-          <td>${it.stock}</td>
-          <td class="actions">
-            <button data-id="${it.id}" data-action="edit">Edit</button>
-            <button data-id="${it.id}" data-action="del">Delete</button>
+          <td>${s.id}</td>
+          <td>${s.name}</td>
+          <td>${s.major}</td>
+          <td>${s.origin}</td>
+          <td>${s.phone ?? ""}</td>
+          <td>${s.email ?? ""}</td>
+          <td>
+            <button type="button" data-action="edit" data-id="${s.id}">Edit</button>
+            <button type="button" data-action="delete" data-id="${s.id}">Delete</button>
           </td>
         `;
         tbody.appendChild(tr);
-      }
+      });
+    } catch (err) {
+      console.error("Error loading students", err);
     }
+  }
 
-    function clearFormFields() {
-      nameEl.value = "";
-      deptEl.value = "";
-      originEl.value = "";
-      priceEl.value = "";
-      stockEl.value = "";
-      editId.value = "";
-      deleteId.value = "";
-    }
+  // ---- Cambiar modo (view / create / edit / delete) ----
+  function changeMode() {
+    const mode = modeSel.value;
 
-    function setCreateMode() {
-      clearFormFields();
-      formTitle.textContent = "Enroll New Student";
-      fieldsGroup.classList.remove("hidden");
-      deleteGroup.classList.add("hidden");
-      submitBtn.textContent = "Create";
-      cancelBtn.classList.add("hidden");
-    }
-
-    function setViewMode() {
-      clearFormFields();
+    if (mode === "view") {
       formTitle.textContent = "Student Viewer";
-      fieldsGroup.classList.add("hidden");
-      deleteGroup.classList.add("hidden");
+      formFields.classList.add("hidden");
+      deleteBox.classList.add("hidden");
       cancelBtn.classList.add("hidden");
     }
 
-    function setEditMode(item = null) {
-      if (item) {
-        editId.value = item.id;
-        nameEl.value = item.name;
-        deptEl.value = item.department || "";
-        originEl.value = item.origin || "";
-        priceEl.value = item.price;
-        stockEl.value = item.stock;
-      } else {
-        clearFormFields();
-      }
-      formTitle.textContent = editId.value ? ("Edit Student #" + editId.value) : "Edit Student";
-      fieldsGroup.classList.remove("hidden");
-      deleteGroup.classList.add("hidden");
-      submitBtn.textContent = "Edit";
+    if (mode === "create") {
+      formTitle.textContent = "Enroll New Student";
+      formFields.classList.remove("hidden");
+      deleteBox.classList.add("hidden");
+      cancelBtn.classList.add("hidden");
+      submitBtn.textContent = "Create";
+
+      // limpiar campos
+      form.reset();
+      editIdInput.value = "";
+    }
+
+    if (mode === "edit") {
+      formTitle.textContent = "Edit Student";
+      formFields.classList.remove("hidden");
+      deleteBox.classList.add("hidden");
       cancelBtn.classList.remove("hidden");
+      submitBtn.textContent = "Save Changes";
     }
 
-    function setDeleteMode(prefillId = "") {
-      clearFormFields();
+    if (mode === "delete") {
       formTitle.textContent = "Delete Student";
-      fieldsGroup.classList.add("hidden");
-      deleteGroup.classList.remove("hidden");
+      formFields.classList.add("hidden");
+      deleteBox.classList.remove("hidden");
       cancelBtn.classList.add("hidden");
-      if (prefillId) deleteId.value = prefillId;
     }
+  }
 
-    // Mode selector
-    modeSel.addEventListener("change", () => {
-      const m = modeSel.value;
-      if (m === "view") setViewMode();
-      else if (m === "create") setCreateMode();
-      else if (m === "edit") setEditMode();
-      else if (m === "delete") setDeleteMode();
-    });
+  modeSel.addEventListener("change", changeMode);
 
-    // Table actions
-    tbody.addEventListener("click", async (e) => {
-      const btn = e.target.closest("button");
-      if (!btn) return;
-      const id = btn.dataset.id;
-      const action = btn.dataset.action;
-
-      if (action === "edit") {
-        const res = await fetch(`${API}/${id}`);
-        if (res.ok) {
-          const item = await res.json();
-          modeSel.value = "edit";
-          setEditMode(item);
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        } else {
-          alert("Not found");
-        }
-      } else if (action === "del") {
-        modeSel.value = "delete";
-        setDeleteMode(id);
-        window.scrollTo({ top: 0, behavior: "smooth" });
+  // ---- Empezar edición al hacer click en botón "Edit" de la tabla ----
+  async function startEdit(id) {
+    try {
+      const res = await fetch(`${API_BASE}/students/${id}`);
+      if (!res.ok) {
+        alert("Student not found");
+        return;
       }
-    });
+      const s = await res.json();
 
-    // Form submit
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const m = modeSel.value;
+      modeSel.value = "edit";
+      changeMode();
 
-      if (m === "create") {
+      editIdInput.value = s.id;
+      nameInput.value   = s.name;
+      majorSel.value    = s.major_id ?? "";
+      originSel.value   = s.origin_id ?? "";
+      phoneInput.value  = s.phone ?? "";
+      emailInput.value  = s.email ?? "";
+    } catch (err) {
+      console.error("Error loading student", err);
+    }
+  }
+
+  // ---- Empezar borrado al hacer click en botón "Delete" de la tabla ----
+  function startDelete(id) {
+    modeSel.value = "delete";
+    changeMode();
+    deleteIdEl.value = id;
+  }
+
+  // Delegación de eventos en la tabla
+  tbody.addEventListener("click", (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+    const id = btn.dataset.id;
+    const action = btn.dataset.action;
+    if (!id || !action) return;
+
+    if (action === "edit") {
+      startEdit(id);
+    } else if (action === "delete") {
+      startDelete(id);
+    }
+  });
+
+  // ---- Submit del formulario ----
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const mode = modeSel.value;
+
+    try {
+      if (mode === "create") {
+        // validar mínimo
+        if (!nameInput.value.trim()) {
+          alert("Name is required");
+          return;
+        }
+        if (!majorSel.value || !originSel.value) {
+          alert("Major and Country are required");
+          return;
+        }
+
         const payload = {
-          name: nameEl.value,
-          department: deptEl.value,            // department name (string)
-          origin: originEl.value || undefined, // origin code (string), API defaults to "MX"
-          price: parseFloat(priceEl.value),
-          stock: parseInt(stockEl.value)
+          name:      nameInput.value.trim(),
+          major_id:  parseInt(majorSel.value),
+          origin_id: parseInt(originSel.value),
+          phone:     phoneInput.value.trim() || null,
+          email:     emailInput.value.trim() || null
         };
-        const res = await fetch(API, {
+
+        const res = await fetch(`${API_BASE}/students`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
-        if (res.ok) {
-          await loadItems();
-          setCreateMode();
-          showNotice("Product created ✓");
-        } else {
-          alert("Error creating product");
-        }
-      } else if (m === "edit") {
-        const id = editId.value;
-        if (!id) {
-          alert("Select a product to edit (use the Edit button in the table).");
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          console.error("Create error:", err);
+          alert("Error creating student");
           return;
         }
+      }
+
+      if (mode === "edit") {
+        const id = editIdInput.value;
+        if (!id) {
+          alert("Select a student to edit (use Edit button in table).");
+          return;
+        }
+        if (!nameInput.value.trim()) {
+          alert("Name is required");
+          return;
+        }
+        if (!majorSel.value || !originSel.value) {
+          alert("Major and Country are required");
+          return;
+        }
+
         const payload = {
-          name: nameEl.value,
-          department: deptEl.value,
-          origin: originEl.value || undefined,
-          price: parseFloat(priceEl.value),
-          stock: parseInt(stockEl.value)
+          name:      nameInput.value.trim(),
+          major_id:  parseInt(majorSel.value),
+          origin_id: parseInt(originSel.value),
+          phone:     phoneInput.value.trim() || null,
+          email:     emailInput.value.trim() || null
         };
-        const res = await fetch(`${API}/${id}`, {
+
+        const res = await fetch(`${API_BASE}/students/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
-        if (res.ok) {
-          await loadItems();
-          setEditMode();
-          showNotice("Product updated ✓");
-        } else {
-          alert("Error updating product");
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          console.error("Update error:", err);
+          alert("Error updating student");
+          return;
         }
-      } else if (m === "delete") {
-        const id = deleteId.value;
-        if (!id) { alert("Enter an ID to delete."); return; }
-        const res = await fetch(`${API}/${id}`, { method: "DELETE" });
-        if (res.ok) {
-          await loadItems();
-          setDeleteMode();
-          showNotice("Product deleted ✓");
-        } else {
-          alert("Not found");
-        }
-      } else {
-        showNotice("View mode: no submit action.");
       }
-    });
 
-    // Cancel button
-    cancelBtn.addEventListener("click", () => {
-      setEditMode();
-      cancelBtn.classList.add("hidden");
-    });
+      if (mode === "delete") {
+        const id = deleteIdEl.value;
+        if (!id) {
+          alert("Enter an ID to delete.");
+          return;
+        }
 
-    // init: load metadata first, then items
-    (async () => {
-      await loadMeta();
-      await loadItems();
-      setViewMode();
-    })();
-  </script>
+        const res = await fetch(`${API_BASE}/students/${id}`, {
+          method: "DELETE"
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          console.error("Delete error:", err);
+          alert("Error deleting student");
+          return;
+        }
+      }
+
+      // Después de cualquier operación → recargar tabla y volver a View
+      await loadStudents();
+      modeSel.value = "view";
+      changeMode();
+    } catch (err) {
+      console.error("Form submit error:", err);
+      alert("Unexpected error");
+    }
+  });
+
+  // Cancelar edición
+  cancelBtn.addEventListener("click", () => {
+    modeSel.value = "view";
+    changeMode();
+  });
+
+  // Init
+  loadOptions();
+  loadStudents();
+  changeMode();
+});
+</script>
+
 </body>
 </html>
