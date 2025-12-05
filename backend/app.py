@@ -182,7 +182,7 @@ def api_create_student():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-
+#nuevo archivo cambio
 # EDITAR
 @app.put("/api/students/<int:student_id>")
 def api_update_student(student_id):
