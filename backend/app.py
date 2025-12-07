@@ -66,7 +66,7 @@ def fetch_student(student_id):
     conn = get_conn()
     with conn.cursor() as cur:
         cur.execute(
-            """
+            f"""
             SELECT 
                 id,
                 name,
@@ -74,9 +74,9 @@ def fetch_student(student_id):
                 origin_id,
                 phone,
                 email
-            FROM students;
+            FROM students
+            WHERE id = {student_id};
             """,
-            (student_id,),
         )
         return cur.fetchone()
 
@@ -164,6 +164,7 @@ def api_create_student():
         name = data.get("name")
         major_id = data.get("major_id")
         origin_id = data.get("origin_id")
+        phone = data.get("phone")
         email = data.get("email")
 
         if not name or not major_id or not origin_id:
@@ -175,9 +176,14 @@ def api_create_student():
         except ValueError:
             return jsonify({"error": "major_id y origin_id deben ser enteros"}), 400
 
-        new_id = create_student(name, major_id, origin_id, email)
-        row = fetch_student(new_id)
-        return jsonify(row), 201
+        try:
+            create_student(name, major_id, origin_id, phone, email)
+            return jsonify({"message": "Student created successfully"}), 201
+        except Exception as e:
+            print("Error creating student:", e)
+            return jsonify({"error": str(e)}), 500
+        #row = fetch_student(new_id)
+        
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -216,6 +222,7 @@ def api_update_student(student_id):
         return jsonify(row), 200
 
     except Exception as e:
+        print(f'Error updating student: {e}')
         return jsonify({"error": str(e)}), 500
 
 
